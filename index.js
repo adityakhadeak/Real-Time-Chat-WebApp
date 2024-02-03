@@ -11,7 +11,7 @@ const app=express()
 app.use(express.json())
 app.use(cors())
 
-app.use('/user',routeUser)
+app.use('/api/user',routeUser)
 ConnectToDB()
 const port=process.env.PORT||3000
 
