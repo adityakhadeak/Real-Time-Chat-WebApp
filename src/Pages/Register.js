@@ -1,8 +1,15 @@
 import { Box, Button, Flex, FormControl, FormLabel, Input, Text, useToast } from '@chakra-ui/react'
-import React from 'react'
-
+import React, { useContext } from 'react'
+import { AuthContext } from '../Context/AuthContext.js'
 const Register = () => {
-    const toast=useToast()
+    const { setRegisterUser, registerUser } = useContext(AuthContext)
+    const toast = useToast()
+    
+    const updateRegisterInfo=(e)=>{
+        const info=({...registerUser,[e.target.name]:e.target.value})
+        setRegisterUser(info)
+        console.log(registerUser)
+    }
     return (
         <Box fontFamily={'Raleway'} color={'white'} bg={'#282828'} >
             <Flex height={'91.8vh'} flexDirection={'column'} justifyContent={'center'} alignItems={'center'}>
@@ -13,15 +20,15 @@ const Register = () => {
                     <form>
                         <FormControl>
                             <FormLabel>Name</FormLabel>
-                            <Input name='name' type='text'></Input>
+                            <Input name='name' type='text' onChange={(e)=>updateRegisterInfo(e)}></Input>
                         </FormControl>
                         <FormControl>
                             <FormLabel>Email</FormLabel>
-                            <Input name='email' type='email'></Input>
+                            <Input name='email' type='email' onChange={(e)=>updateRegisterInfo(e)}></Input>
                         </FormControl>
                         <FormControl>
                             <FormLabel>Password</FormLabel>
-                            <Input name='password' type='password'></Input>
+                            <Input name='password' type='password' onChange={(e)=>updateRegisterInfo(e)}></Input>
                         </FormControl>
                     </form>
                     <Flex justifyContent={'center'}>
