@@ -1,8 +1,10 @@
 import { Box, Button, Flex, Spacer, Text } from '@chakra-ui/react'
-import React from 'react'
+import React, { useContext } from 'react'
 import { NavLink } from 'react-router-dom'
+import { AuthContext } from '../Context/AuthContext.js'
 
 const NavBar = () => {
+    const{user}=useContext(AuthContext)
     return (
         <Flex w={'100%'} fontFamily={'Raleway'} color={'white'} bg={'#202528'} alignItems={'center'} p={'10px'} px={'20px'} gap={5}>
             <Box ml={'10px'} px={'5px'}>
@@ -12,7 +14,9 @@ const NavBar = () => {
             </Box>
             <Spacer />
             <Box display={{ base: 'none', sm: 'block', md: 'block', lg: 'block' }} color={'orange'}>
-                Logged In as Aditya
+                {user&&<Text>
+                    {`Logged In as ${user.name}`}
+                </Text>}
             </Box>
             <Spacer />
             <Box display={'flex'} flexDirection={'row'} mr={'10px'} px={'5px'}>
