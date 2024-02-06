@@ -8,16 +8,23 @@ import {
 import Login from './Pages/Login.js';
 import Register from './Pages/Register.js';
 import RootLayout from './Layouts/RootLayout.js';
+import { useContext } from 'react';
+import { AuthContext } from './Context/AuthContext.js';
+import Chat from './Pages/Chat.js';
 
-const router = createBrowserRouter(
-  createRoutesFromElements(
-    <Route path='/' element={<RootLayout/>}>
-      <Route path='login' element={<Login/>}/>
-      <Route path='register' element={<Register/>}/>
-    </Route>
-  )
-)
+
 function App() {
+  const{user} =useContext(AuthContext)
+
+  const router = createBrowserRouter(
+    createRoutesFromElements(
+      <Route path='/' element={<RootLayout/>}>
+        <Route index element={user ?<Chat/>:<Login/>}/>
+        <Route path='login' element={user ?<Chat/>:<Login/>}/>
+        <Route path='register' element={user ?<Chat/>:<Register/>}/>
+      </Route>
+    )
+  )
   return (
       <RouterProvider router={router}/>
   );
