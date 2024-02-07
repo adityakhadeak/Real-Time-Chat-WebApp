@@ -18,15 +18,15 @@ const usercontroller = async (req, res) => {
                 message: "All fields are required"
             })
         }
+        if (!validator.isEmail(email)) {
+            return res.status(400).json({
+                message: "Enter a valid Email"
+            })
+        }
         let user = await UserModel.findOne({ email })
         if (user) {
             return res.status(400).json({
                 message: "User with this email already exist"
-            })
-        }
-        if (!validator.isEmail(email)) {
-            return res.status(400).json({
-                message: "Use a valid Email"
             })
         }
         if (!validator.isStrongPassword(password)) {
@@ -51,6 +51,7 @@ const usercontroller = async (req, res) => {
     } catch (error) {
         console.log(error)
         res.status(500).json({
+            message:"Internal Server Error",
             error
         })
     }
@@ -60,6 +61,17 @@ const usercontroller = async (req, res) => {
 const logincontroller = async (req, res) => {
     try {
         const { email, password } = req.body
+        if(email==""||password=="")
+        {
+           return res.status(400).json({
+            message:"All field are required..."
+           }) 
+        }
+        if (!validator.isEmail(email)) {
+            return res.status(400).json({
+                message: "Enter valid Email..."
+            })
+        }
         const user = await UserModel.findOne({ email })
         if (!user) {
             return res.status(400).json({
