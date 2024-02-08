@@ -11,6 +11,7 @@ import RootLayout from './Layouts/RootLayout.js';
 import { useContext } from 'react';
 import { AuthContext } from './Context/AuthContext.js';
 import Chat from './Pages/Chat.js';
+import { ChatContextProvider } from './Context/ChatContext.js';
 
 
 function App() {
@@ -26,7 +27,9 @@ function App() {
     )
   )
   return (
-      <RouterProvider router={router}/>
+    <ChatContextProvider user={user}>
+    <RouterProvider router={router}/>
+    </ChatContextProvider>
   );
 }
 

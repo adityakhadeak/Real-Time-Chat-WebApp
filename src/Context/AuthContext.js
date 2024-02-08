@@ -14,7 +14,7 @@ export const AuthContextProvider = (props) => {
     const [loginUserInfo, setLoginUserInfo] = useState({ email: "", password: "" })
 
     useEffect(() => {
-        const user = localStorage.getItem('user')
+        const user = JSON.parse(localStorage.getItem('user'))
         setUser(user)
         // eslint-disable-next-line
     }, [])
@@ -42,7 +42,7 @@ export const AuthContextProvider = (props) => {
                 isClosable: true,
             })
         }
-        localStorage.setItem('user', response)
+        localStorage.setItem('user', JSON.stringify(response))
         setUser(response)
         // setRegisterUserInfo({ name: "", email: "", password: "" })
         toast({
@@ -70,7 +70,8 @@ export const AuthContextProvider = (props) => {
                 isClosable: true,
             })
         }
-        localStorage.setItem('user', response)
+        console.log(response)
+        localStorage.setItem('user', JSON.stringify(response))
         setUser(response)
         // setLoginUserInfo({ email: "", password: "" })
         toast({
