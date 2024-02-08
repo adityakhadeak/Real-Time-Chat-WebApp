@@ -1,6 +1,5 @@
-import { Avatar, AvatarBadge, Badge, Box, Flex, Grid, Text, Toast, useToast } from '@chakra-ui/react'
-import React, { useEffect, useState } from 'react'
-import { baseUrl, getRequest } from '../Utilis/services'
+import { Avatar, AvatarBadge, Badge, Box, Flex } from '@chakra-ui/react'
+import React from 'react'
 import { useFetchRecipientUser } from '../Hooks/useFetchRecipientUser'
 
 const UserChats = ({ user, chat }) => {

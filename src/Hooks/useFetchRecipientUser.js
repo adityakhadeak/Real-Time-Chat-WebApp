@@ -8,14 +8,14 @@ export const useFetchRecipientUser = (chat,user) => {
     const [recipientUser, setRecipientUser] = useState(null)
 
     useEffect(() => {
-
         const recipientUserId = chat.members.filter((id) => {
-            return id != user.id
+            return id !== user.id
         })
         const getRecipientUser = async () => {
-            const response = await getRequest(`${baseUrl}/api/user/getuser/${recipientUserId}`)
             if (!recipientUserId)
                 return null
+            const response = await getRequest(`${baseUrl}/api/user/getuser/${recipientUserId}`)
+            console.log(response)
             if (response.error) {
                 return toast({
                     title: "Error Loading RecipientUser",
@@ -28,6 +28,7 @@ export const useFetchRecipientUser = (chat,user) => {
             setRecipientUser(response)
         }
         getRecipientUser()
+        // eslint-disable-next-line
     }, [])
 
     return{recipientUser}

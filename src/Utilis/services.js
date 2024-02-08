@@ -23,7 +23,7 @@ export const getRequest=async(url)=>{
     })
 
     const data= await response.json()
-
+    console.log(data)
     if(!response.ok)
     {
         return {error:true,message:data.message}
