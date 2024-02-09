@@ -10,6 +10,7 @@ export const ChatContextProvider = ({ user, children }) => {
     const [userChats, setUserChats] = useState(null)
     const [isUserChatLoading, setIsUserChatLoading] = useState(false)
     const [potentialChats, setPotentialChat] = useState(null)
+    const [currentChat, setCurrentChat] = useState(null)
     const id = user?.id
 
     useEffect(() => {
@@ -84,7 +85,11 @@ export const ChatContextProvider = ({ user, children }) => {
         // eslint-disable-next-line
     }, [])
 
-    return (<ChatContext.Provider value={{ isUserChatLoading, userChats, potentialChats, createChat }}>
+    const getCurrentChat=useCallback((chat)=>{
+        setCurrentChat(chat)
+    },[])
+    console.log(currentChat)
+    return (<ChatContext.Provider value={{ isUserChatLoading, userChats, potentialChats, createChat,getCurrentChat,currentChat }}>
         {children}
     </ChatContext.Provider>
     )

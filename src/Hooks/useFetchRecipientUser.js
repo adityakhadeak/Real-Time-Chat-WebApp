@@ -1,14 +1,17 @@
 import { useToast } from "@chakra-ui/react"
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { getRequest ,baseUrl} from "../Utilis/services"
+import { ChatContext } from "../Context/ChatContext.js"
 
 
 export const useFetchRecipientUser = (chat,user) => {
     const toast = useToast()
+    const{currentChat}=useContext(ChatContext)
     const [recipientUser, setRecipientUser] = useState(null)
 
     useEffect(() => {
-        const recipientUserId = chat.members.filter((id) => {
+        console.log(chat)
+        const recipientUserId = chat?.members.filter((id) => {
             return id !== user.id
         })
         const getRecipientUser = async () => {
@@ -29,7 +32,7 @@ export const useFetchRecipientUser = (chat,user) => {
         }
         getRecipientUser()
         // eslint-disable-next-line
-    }, [])
+    }, [currentChat])
 
     return{recipientUser}
 }

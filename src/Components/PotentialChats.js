@@ -25,7 +25,7 @@ const PotentialChats = () => {
                     <Box >
                         <Button zIndex={'11'} onClick={showHideNewChat}>New</Button>
                         <Box zIndex={'11'} boxShadow={'base'} flexDirection={'column'} display={showNewChat ? 'flex' : 'none'} borderRadius={'10px'} top={'45px'} padding={'10px'} bgColor={'#292929'} width={'100%'} height={'30em'} position={'absolute'}>
-                            <Text textAlign={'center'} display={potentialChats.length===0?'block':'none'}>No available Users</Text> 
+                            <Text textAlign={'center'} display={potentialChats?.length===0?'block':'none'}>No available Users</Text> 
                                 { potentialChats?.map((chat, index) => (
                                     <Box key={index} onClick={() => {
                                         createChat(chat._id, user.id)

@@ -1,12 +1,14 @@
 import { Avatar, AvatarBadge, Badge, Box, Flex } from '@chakra-ui/react'
-import React from 'react'
+import React, { useContext } from 'react'
 import { useFetchRecipientUser } from '../Hooks/useFetchRecipientUser'
+import { ChatContext } from '../Context/ChatContext'
 
 const UserChats = ({ user, chat }) => {
+    const{getCurrentChat}=useContext(ChatContext)
     const { recipientUser } = useFetchRecipientUser(chat, user)
 
     return (
-        <Box as='button' _hover={{ bgColor: '#4a4a4a' }} fontFamily={'Raleway'} borderRadius={'8px'} color={'white'} padding={'10px'} px={'15px'}>
+        <Box onClick={()=>{getCurrentChat(chat)}} as='button' _hover={{ bgColor: '#4a4a4a' }} fontFamily={'Raleway'} borderRadius={'8px'} color={'white'} padding={'10px'} px={'15px'}>
             <Flex gap={'1'} position={'relative'} direction={'row'}>
                 <Box py='2px' px='6px'>
                     <Avatar >
