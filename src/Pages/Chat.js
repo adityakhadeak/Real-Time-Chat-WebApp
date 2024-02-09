@@ -12,7 +12,7 @@ const Chat = () => {
     <Grid height='100%'
       templateRows='1fr'
       templateColumns='1fr 3fr'>
-      <GridItem borderRight='1px solid black' padding={'10px'} px={'15px'} bg='#2c2c2c'>
+      <GridItem borderRight='1px solid #343232' padding={'10px'} px={'15px'} bg='#2c2c2c'>
         <PotentialChats />
         <Box>
           {

@@ -29,7 +29,7 @@ const UserChats = ({ user, chat }) => {
                     </Box>
 
                 </Flex>
-                <Badge display={'flex'} justifyContent={'center'} alignItems={'center'} borderRadius={'100%'} width={'20px'} height={'20px'} position={'absolute'} bottom={'2px'} right={'2px'} ml='1' fontSize='14px' colorScheme="whatsapp">
+                <Badge display={'flex'} justifyContent={'center'} alignItems={'center'} borderRadius={'100%'} width={'20px'} height={'20px'} position={'absolute'} bottom={'2px'} right={'2px'} ml='1' fontSize='14px' bgColor={'#1daa61'} >
                     2
                 </Badge>
             </Flex>

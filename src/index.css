@@ -12,3 +12,19 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.input_Send_Msg::placeholder {
+  color: #999; /* Change the color to the desired color */
+}
+/* .chat-Box-Scroll-bar::-webkit-scrollbar{
+  width: 10px !important;
+  height: 30px;
+} */
+
+::-webkit-scrollbar {
+  width: 2px;
+}
+::-webkit-scrollbar-thumb {
+  background: #c7c6c6;
+  border-radius: 5px;
+}

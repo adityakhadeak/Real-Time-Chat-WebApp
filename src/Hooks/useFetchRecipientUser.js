@@ -10,7 +10,6 @@ export const useFetchRecipientUser = (chat,user) => {
     const [recipientUser, setRecipientUser] = useState(null)
 
     useEffect(() => {
-        console.log(chat)
         const recipientUserId = chat?.members.filter((id) => {
             return id !== user.id
         })
@@ -18,7 +17,6 @@ export const useFetchRecipientUser = (chat,user) => {
             if (!recipientUserId)
                 return null
             const response = await getRequest(`${baseUrl}/api/user/getuser/${recipientUserId}`)
-            console.log(response)
             if (response.error) {
                 return toast({
                     title: "Error Loading RecipientUser",
