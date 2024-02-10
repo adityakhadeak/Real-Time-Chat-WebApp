@@ -1,6 +1,7 @@
 import { createContext, useCallback, useEffect, useState } from "react"
 import { PostRequest, baseUrl, getRequest } from "../Utilis/services"
 import { useToast } from "@chakra-ui/react"
+import { io } from "socket.io-client";
 
 export const ChatContext = createContext()
 
@@ -13,8 +14,31 @@ export const ChatContextProvider = ({ user, children }) => {
     const [currentChat, setCurrentChat] = useState(null)
     const [currentChatMessages,setCurrentChatMessages]=useState(null)
     const [iscurrentMessagesLoading,setIsCurrentMessagesLoading]=useState(false)
+    const [onlineUsers, setOnlineUsers] = useState([])
+    const [socket,setSocket]=useState(null)
     const id = user?.id
 
+    console.log(onlineUsers)
+    useEffect(() => {
+      const newSocket=io("http://localhost:9000")
+        setSocket(newSocket)
+      return () => {
+        newSocket.disconnect()
+      }
+    }, [user])
+    
+    useEffect(() => {
+        if(socket==null)return
+        socket.emit('addNewUser',id)
+        socket.on('getOnlineUsers',(res)=>{
+            setOnlineUsers(res)
+        })
+
+        return()=>{
+            socket.off('getOnlineUsers')
+        }
+    }, [socket])
+    
     useEffect(() => {
         const findUsers = async () => {
             const response = await getRequest(`${baseUrl}/api/user/`)
@@ -136,9 +160,10 @@ export const ChatContextProvider = ({ user, children }) => {
         }
         setCurrentChatMessages((messages)=>[...messages,response])
         setTextMessage('')
-    })
+        // eslint-disable-next-line
+    },[])
     console.log(currentChat)
-    return (<ChatContext.Provider value={{ isUserChatLoading, userChats, potentialChats, createChat,getCurrentChat,currentChat,currentChatMessages,sendMessage }}>
+    return (<ChatContext.Provider value={{onlineUsers, isUserChatLoading, userChats, potentialChats, createChat,getCurrentChat,currentChat,currentChatMessages,sendMessage,iscurrentMessagesLoading }}>
         {children}
     </ChatContext.Provider>
     )

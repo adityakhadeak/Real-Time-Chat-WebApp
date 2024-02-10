@@ -4,7 +4,7 @@ import { useFetchRecipientUser } from '../Hooks/useFetchRecipientUser'
 import { ChatContext } from '../Context/ChatContext'
 
 const UserChats = ({ user, chat }) => {
-    const{getCurrentChat}=useContext(ChatContext)
+    const{getCurrentChat,onlineUsers}=useContext(ChatContext)
     const { recipientUser } = useFetchRecipientUser(chat, user)
 
     return (
@@ -12,8 +12,8 @@ const UserChats = ({ user, chat }) => {
             <Flex gap={'1'} position={'relative'} direction={'row'}>
                 <Box py='2px' px='6px'>
                     <Avatar >
-                    <AvatarBadge boxSize='0.8em' bg='green.500' />
-
+                    <AvatarBadge display={  onlineUsers?.some((user)=>user?.userId===recipientUser?._id)?'block':'none'
+                       } boxSize='0.8em' bg='green.500' />                    
                     </Avatar>
                 </Box>
                 <Flex gap={'3'} width={'100%'} justifyContent={'space-between'} mx='10px'>

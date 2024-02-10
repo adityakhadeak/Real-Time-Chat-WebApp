@@ -1,4 +1,4 @@
-import { Avatar, Box, Button, Grid, GridItem, HStack, Icon, Input, InputGroup, InputRightElement, Text, flexbox } from '@chakra-ui/react'
+import { Avatar, Box, Button, Grid, GridItem, HStack, Icon,  Text } from '@chakra-ui/react'
 import React, { useContext, useState } from 'react'
 import { ChatContext } from '../Context/ChatContext.js'
 import { HiOutlineChatBubbleLeftRight } from "react-icons/hi2";

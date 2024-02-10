@@ -1,11 +1,9 @@
-import { useToast } from "@chakra-ui/react"
 import { useContext, useEffect, useState } from "react"
 import { getRequest ,baseUrl} from "../Utilis/services"
 import { ChatContext } from "../Context/ChatContext.js"
 
 
 export const useFetchRecipientUser = (chat,user) => {
-    const toast = useToast()
     const{currentChat}=useContext(ChatContext)
     const [recipientUser, setRecipientUser] = useState(null)
 
