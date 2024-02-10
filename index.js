@@ -5,7 +5,6 @@ import routeUser from './routes/userRoutes.js'
 import routeChat from './routes/chatRoutes.js'
 import routeMessages from './routes/messageRoutes.js'
 import dotenv from 'dotenv'
-
 dotenv.config()
 
 const app=express()
@@ -18,7 +17,10 @@ app.use('/api/chats',routeChat)
 app.use('/api/messages',routeMessages)
 
 ConnectToDB()
-const port=process.env.PORT||3000
+
+const port=process.env.PORT||5000
+
+
 
 app.listen(port,(res,req)=>{
     console.log(`Server is connected to ${port}`)
