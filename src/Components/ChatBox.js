@@ -1,23 +1,25 @@
-import { Avatar, Box, Grid, GridItem, HStack, Icon, Input, InputGroup, InputRightElement, Text, flexbox } from '@chakra-ui/react'
-import React, { useContext } from 'react'
+import { Avatar, Box, Button, Grid, GridItem, HStack, Icon, Input, InputGroup, InputRightElement, Text, flexbox } from '@chakra-ui/react'
+import React, { useContext, useState } from 'react'
 import { ChatContext } from '../Context/ChatContext.js'
 import { HiOutlineChatBubbleLeftRight } from "react-icons/hi2";
 import { useFetchRecipientUser } from '../Hooks/useFetchRecipientUser';
 import { AuthContext } from '../Context/AuthContext';
 import { VscSend } from "react-icons/vsc";
 import moment from 'moment'
-
-const msg_From_user={
-    right:'10px'
+import InputEmoji from 'react-input-emoji'
+const msg_From_user = {
+    right: '10px'
 }
-const msg_From_Recipient={
-    left:'10px'
+const msg_From_Recipient = {
+    left: '10px',
+    background:'#4a4a4a'
 }
 const ChatBox = () => {
-    const { currentChat, currentChatMessages } = useContext(ChatContext)
+    const { currentChat, currentChatMessages,sendMessage } = useContext(ChatContext)
     const { user } = useContext(AuthContext)
     const { recipientUser } = useFetchRecipientUser(currentChat, user)
-    console.log(currentChatMessages)
+    const[text,setTextMessage]=useState('')
+    console.log(text)
     return (
         currentChat ? (
             <Grid fontFamily={'Raleway'} height='100%' templateColumns={'auto'} templateRows={'65px 520px 45px'} >
@@ -28,13 +30,13 @@ const ChatBox = () => {
                     </HStack>
                 </GridItem>
                 <GridItem py={'10px'} bgImage=''>
-                    <Box className='chat-Box-Scroll-bar' width={'100%'} height={'100%'} display={'flex'} overflowY={'scroll'} gap={20} flexDirection={'column'}  padding={'10px'} >
+                    <Box className='chat-Box-Scroll-bar' width={'100%'} height={'100%'} display={'flex'} overflowY={'scroll'} gap={20} flexDirection={'column'} padding={'10px'} >
                         {
                             currentChatMessages.map((message, index) => (
-                                <Box   key={index} position={'relative'} padding={'8px'}>
-                                    <Box minWidth={'100px'} width={'fit-content'} height={'60px'} bgColor={'#005c4b'} rounded={10} p={'10px'} sx={message.senderId===user.id?msg_From_user:msg_From_Recipient} position={'absolute'}>
+                                <Box key={index} position={'relative'} padding={'8px'}>
+                                    <Box minWidth={'100px'} width={'fit-content'} height={'60px'} bgColor={'#005c4b'} rounded={10} p={'10px'} sx={message.senderId === user.id ?msg_From_Recipient:msg_From_user } position={'absolute'}>
                                         <Text as="span">{message.text}</Text>
-                                        <Text right={'10px'} bottom={'2px'} position={'absolute'} fontSize={'12px'}>{moment().format('hh::mm')}</Text>
+                                        <Text right={'10px'} bottom={'2px'} position={'absolute'} fontSize={'12px'}>{moment(message.createdAt).format('hh::mm')}</Text>
 
                                     </Box>
                                 </Box>
@@ -43,14 +45,20 @@ const ChatBox = () => {
                     </Box>
                 </GridItem>
                 <GridItem borderTop={'0.3px solid #343232'} width={'100%'}>
-                    <Box height={'100%'} display={'flex'}  justifyContent={'center'}  >
-                        <InputGroup mx={'20px'} px={'15px'}  >
-                            <Input className='input_Send_Msg' fontSize={'15px'} color={'#9d9d9d'} placeholder='Type a message' padding={'3px'} px={'10px'} variant='unstyled' />
+                    <Box height={'100%'} px={'10px'} display={'flex'} alignItems={'center'} justifyContent={'space-between'}  >
+
+                        <Box  width={'95%'}>
+                            <InputEmoji value={text}  keepOpened cleanOnEnter  onChange={setTextMessage} placeholder='Type a message' borderRadius={'10px'}  />
+                        </Box>
+                        <Button onClick={()=>{sendMessage(text,currentChat._id,recipientUser._id,setTextMessage)}} bgColor={'transparent'}  _hover={{ bgColor: '#4a4a4a' }} rounded={'5'} cursor={'pointer'}  >< VscSend color='#9d9d9d' fontSize={'25px'} /></Button>
+
+                        {/* <InputGroup mx={'20px'} px={'15px'}  >
+                            <InputEmoji  className='input_Send_Msg' fontSize={'15px'} color={'#9d9d9d'} placeholder='Type a message' borderRadius={'10px'} padding={'3px'} px={'10px'}  />
+                            
                             <InputRightElement  top={'4.5px'} _hover={{ bgColor: '#4a4a4a' }} rounded={'5'} cursor={'pointer'}>
-                                <VscSend fontSize={'20px'} color='green.500' />
 
                             </InputRightElement>
-                        </InputGroup>
+                        </InputGroup> */}
                     </Box>
                 </GridItem>
 

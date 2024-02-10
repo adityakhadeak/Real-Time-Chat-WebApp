@@ -17,15 +17,15 @@ export const useFetchRecipientUser = (chat,user) => {
             if (!recipientUserId)
                 return null
             const response = await getRequest(`${baseUrl}/api/user/getuser/${recipientUserId}`)
-            if (response.error) {
-                return toast({
-                    title: "Error Loading RecipientUser",
-                    description: response.message,
-                    status: 'error',
-                    duration: 4000,
-                    isClosable: true,
-                })
-            }
+            // if (response.error) {
+            //     return toast({
+            //         title: "Error Loading RecipientUser",
+            //         description: response.message,
+            //         status: 'error',
+            //         duration: 4000,
+            //         isClosable: true,
+            //     })
+            // }
             setRecipientUser(response)
         }
         getRecipientUser()

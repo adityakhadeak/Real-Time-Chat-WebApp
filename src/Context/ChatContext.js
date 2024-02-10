@@ -113,8 +113,32 @@ export const ChatContextProvider = ({ user, children }) => {
     const getCurrentChat=useCallback((chat)=>{
         setCurrentChat(chat)
     },[])
+
+    const sendMessage=useCallback(async(text,chatId,senderId,setTextMessage)=>{
+        if(!text)return( 
+            toast({ 
+        title: "Message cannot to empty",
+        status: 'error',
+        duration: 4000,
+        isClosable: true,}))
+
+        const response=await PostRequest(`${baseUrl}/api/messages`,JSON.stringify({text,chatId,senderId}))
+
+        if(response.error)
+        {
+            return(
+            toast({ 
+                title: "Send cannot be send",
+                description:response.error,
+                status: 'error',
+                duration: 4000,
+                isClosable: true,}))
+        }
+        setCurrentChatMessages((messages)=>[...messages,response])
+        setTextMessage('')
+    })
     console.log(currentChat)
-    return (<ChatContext.Provider value={{ isUserChatLoading, userChats, potentialChats, createChat,getCurrentChat,currentChat,currentChatMessages }}>
+    return (<ChatContext.Provider value={{ isUserChatLoading, userChats, potentialChats, createChat,getCurrentChat,currentChat,currentChatMessages,sendMessage }}>
         {children}
     </ChatContext.Provider>
     )
