@@ -2,6 +2,7 @@ import { Box, Button, Flex, Spacer, Text } from '@chakra-ui/react'
 import React, { useContext } from 'react'
 import { Link } from 'react-router-dom'
 import { AuthContext } from '../Context/AuthContext.js'
+import Notifications from './Notifications.js'
 
 const NavBar = () => {
     const { user,logOut} = useContext(AuthContext)
@@ -20,6 +21,7 @@ const NavBar = () => {
                 </Text>}
             </Box>
             <Spacer />
+            <Notifications/>
             <Box display={'flex'} flexDirection={'row'} mr={'10px'} px={'5px'}>
                 {!user?<> 
                 <Link to={'login'}><Button size={{ base: 'sm', md: 'md' }} colorScheme='blue' px={{ base: '3px', md: '10px' }} mx={'3px'}>Login</Button></Link>

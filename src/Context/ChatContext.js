@@ -11,64 +11,70 @@ export const ChatContextProvider = ({ user, children }) => {
     const [userChats, setUserChats] = useState(null)
     const [isUserChatLoading, setIsUserChatLoading] = useState(false)
     const [potentialChats, setPotentialChat] = useState(null)
+    const [allUsers, setAllUsers] = useState(null)
     const [currentChat, setCurrentChat] = useState(null)
-    const [currentChatMessages,setCurrentChatMessages]=useState(null)
-    const [iscurrentMessagesLoading,setIsCurrentMessagesLoading]=useState(false)
+    const [currentChatMessages, setCurrentChatMessages] = useState(null)
+    const [iscurrentMessagesLoading, setIsCurrentMessagesLoading] = useState(false)
     const [onlineUsers, setOnlineUsers] = useState([])
-    const [newMessage,setNewMessage]=useState("")
-    const [socket,setSocket]=useState(null)
+    const [notifications, setNotifications] = useState([])
+    const [newMessage, setNewMessage] = useState("")
+    const [socket, setSocket] = useState(null)
     const id = user?.id
 
     //Socket.io Connection
     useEffect(() => {
-      const newSocket=io("http://localhost:9000")
+        const newSocket = io("http://localhost:9000")
         setSocket(newSocket)
-      return () => {
-        newSocket.disconnect()
-      }
+        return () => {
+            newSocket.disconnect()
+        }
     }, [user])
-    
+
     //Adding Online users
     useEffect(() => {
-        if(socket==null)return
-        socket.emit('addNewUser',id)
-        socket.on('getOnlineUsers',(res)=>{
+        if (socket == null) return
+        socket.emit('addNewUser', id)
+        socket.on('getOnlineUsers', (res) => {
             setOnlineUsers(res)
         })
 
-        return()=>{
+        return () => {
             socket.off('getOnlineUsers')
         }
     }, [socket])
-    
+
     //sendMessage
     useEffect(() => {
-        if(socket===null)return
+        if (socket === null) return
         const recipientUserId = currentChat?.members.filter((id) => {
             return id !== user.id
         })
-        console.log("RecipientId ",...recipientUserId)
-        console.log("newMessage ",newMessage)
-        console.log("userId ",user.id)
 
-      socket.emit('sendMessage',{...newMessage,recipientUserId:recipientUserId[0]})
-     
+        socket.emit('sendMessage', { ...newMessage, recipientUserId: recipientUserId?.[0] })
+
     }, [newMessage])
-    
-    //Receive Message
-    useEffect(() => {
-        if(socket==null)return
-        socket.on('getMessage',(res)=>{
-            if(currentChat?._id !== res.chatId)return
-            
-            setCurrentChatMessages((prev)=>[...prev,res])
-        })
 
-        return()=>{
+    //Receive Message and Notifications
+    useEffect(() => {
+        if (socket == null) return
+        socket.on('getMessage', (res) => {
+            if (currentChat?._id !== res.chatId) return
+
+            setCurrentChatMessages((prev) => [...prev, res])
+        })
+        socket.on('getNotifications', (res) => {
+            const isChatOpen = currentChat?.members.some((id) => id === res.senderId)
+            if (isChatOpen)
+                setNotifications((prev) => [{ ...res, isRead: true }, ...prev]);
+            else
+                setNotifications((prev) => [res, ...prev]);
+        })
+        return () => {
             socket.off('getMessage')
+            socket.off('getNotifications')
         }
-    }, [socket,currentChat])
-    
+    }, [socket, currentChat])
+
     useEffect(() => {
         const findUsers = async () => {
             const response = await getRequest(`${baseUrl}/api/user/`)
@@ -95,6 +101,7 @@ export const ChatContextProvider = ({ user, children }) => {
                 return !isChatCreated
             })
             setPotentialChat(pChats)
+            setAllUsers(response)
         }
         findUsers()
         // eslint-disable-next-line
@@ -126,27 +133,27 @@ export const ChatContextProvider = ({ user, children }) => {
 
     useEffect(() => {
         const getMessages = async () => {
-           
+
             setIsCurrentMessagesLoading(false)
             const response = await getRequest(`${baseUrl}/api/messages/getmessages/${currentChat?._id}`)
             setIsCurrentMessagesLoading(false)
-                if (response.error) {
-                    return toast({
-                        title: "Error Loading Messages",
-                        description: response.message,
-                        status: 'error',
-                        duration: 4000,
-                        isClosable: true,
-                    })
-                }
-                setCurrentChatMessages(response)
-            
+            if (response.error) {
+                return toast({
+                    title: "Error Loading Messages",
+                    description: response.message,
+                    status: 'error',
+                    duration: 4000,
+                    isClosable: true,
+                })
+            }
+            setCurrentChatMessages(response)
+
         }
         getMessages()
         // eslint-disable-next-line
     }, [currentChat])
 
-    
+
     const createChat = useCallback(async (firstId, secondId) => {
         const response = await PostRequest(`${baseUrl}/api/chats`, JSON.stringify({ firstId, secondId }))
 
@@ -160,40 +167,41 @@ export const ChatContextProvider = ({ user, children }) => {
             })
         }
 
-        setUserChats((u)=>[...u, response])
+        setUserChats((u) => [...u, response])
         // eslint-disable-next-line
     }, [])
 
-    const getCurrentChat=useCallback((chat)=>{
+    const getCurrentChat = useCallback((chat) => {
         setCurrentChat(chat)
-    },[])
+    }, [])
 
-    const sendMessage=useCallback(async(text,chatId,senderId,setTextMessage)=>{
-        if(!text)return( 
-            toast({ 
-        title: "Message cannot to empty",
-        status: 'error',
-        duration: 4000,
-        isClosable: true,}))
-
-        const response=await PostRequest(`${baseUrl}/api/messages`,JSON.stringify({text,chatId,senderId}))
-
-        if(response.error)
-        {
-            return(
-            toast({ 
-                title: "Message cannot be send",
-                description:response.error,
+    const sendMessage = useCallback(async (text, chatId, senderId, setTextMessage) => {
+        if (!text) return (
+            toast({
+                title: "Message cannot to empty",
                 status: 'error',
                 duration: 4000,
-                isClosable: true,}))
+                isClosable: true,
+            }))
+
+        const response = await PostRequest(`${baseUrl}/api/messages`, JSON.stringify({ text, chatId, senderId }))
+
+        if (response.error) {
+            return (
+                toast({
+                    title: "Message cannot be send",
+                    description: response.error,
+                    status: 'error',
+                    duration: 4000,
+                    isClosable: true,
+                }))
         }
-        setCurrentChatMessages((messages)=>[...messages,response])
+        setCurrentChatMessages((messages) => [...messages, response])
         setTextMessage('')
         setNewMessage(response)
         // eslint-disable-next-line
-    },[])
-    return (<ChatContext.Provider value={{onlineUsers, isUserChatLoading, userChats, potentialChats, createChat,getCurrentChat,currentChat,currentChatMessages,sendMessage,iscurrentMessagesLoading }}>
+    }, [])
+    return (<ChatContext.Provider value={{ notifications,allUsers,onlineUsers, isUserChatLoading, userChats, potentialChats, createChat, getCurrentChat, currentChat, currentChatMessages, sendMessage, iscurrentMessagesLoading }}>
         {children}
     </ChatContext.Provider>
     )

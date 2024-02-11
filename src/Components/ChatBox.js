@@ -1,5 +1,5 @@
 import { Avatar, Box, Button, Grid, GridItem, HStack, Icon,  Text } from '@chakra-ui/react'
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { ChatContext } from '../Context/ChatContext.js'
 import { HiOutlineChatBubbleLeftRight } from "react-icons/hi2";
 import { useFetchRecipientUser } from '../Hooks/useFetchRecipientUser';
@@ -19,6 +19,13 @@ const ChatBox = () => {
     const { user } = useContext(AuthContext)
     const { recipientUser } = useFetchRecipientUser(currentChat, user)
     const[text,setTextMessage]=useState('')
+    const scroll=useRef()
+
+    useEffect(() => {
+        scroll.current?.scrollIntoView({behavior:"smooth"})
+    }, [currentChatMessages])
+    
+
     return (
         currentChat ? (
             <Grid fontFamily={'Raleway'} height='100%' templateColumns={'auto'} templateRows={'65px 520px 45px'} >
@@ -32,7 +39,7 @@ const ChatBox = () => {
                     <Box className='chat-Box-Scroll-bar' width={'100%'} height={'100%'} display={'flex'} overflowY={'scroll'} gap={20} flexDirection={'column'} padding={'10px'} >
                         {
                             currentChatMessages.map((message, index) => (
-                                <Box key={index} position={'relative'} padding={'8px'}>
+                                <Box ref={scroll} key={index} position={'relative'} padding={'8px'}>
                                     <Box minWidth={'100px'} width={'fit-content'} height={'60px'} bgColor={'#005c4b'} rounded={10} p={'10px'} sx={message.senderId !== user.id ?msg_From_Recipient:msg_From_user } position={'absolute'}>
                                         <Text as="span">{message.text}</Text>
                                         <Text right={'10px'} bottom={'2px'} position={'absolute'} fontSize={'12px'}>{moment(message.createdAt).format('hh::mm')}</Text>
