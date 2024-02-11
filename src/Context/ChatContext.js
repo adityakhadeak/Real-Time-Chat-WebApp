@@ -15,10 +15,11 @@ export const ChatContextProvider = ({ user, children }) => {
     const [currentChatMessages,setCurrentChatMessages]=useState(null)
     const [iscurrentMessagesLoading,setIsCurrentMessagesLoading]=useState(false)
     const [onlineUsers, setOnlineUsers] = useState([])
+    const [newMessage,setNewMessage]=useState("")
     const [socket,setSocket]=useState(null)
     const id = user?.id
 
-    console.log(onlineUsers)
+    //Socket.io Connection
     useEffect(() => {
       const newSocket=io("http://localhost:9000")
         setSocket(newSocket)
@@ -27,6 +28,7 @@ export const ChatContextProvider = ({ user, children }) => {
       }
     }, [user])
     
+    //Adding Online users
     useEffect(() => {
         if(socket==null)return
         socket.emit('addNewUser',id)
@@ -38,6 +40,34 @@ export const ChatContextProvider = ({ user, children }) => {
             socket.off('getOnlineUsers')
         }
     }, [socket])
+    
+    //sendMessage
+    useEffect(() => {
+        if(socket===null)return
+        const recipientUserId = currentChat?.members.filter((id) => {
+            return id !== user.id
+        })
+        console.log("RecipientId ",...recipientUserId)
+        console.log("newMessage ",newMessage)
+        console.log("userId ",user.id)
+
+      socket.emit('sendMessage',{...newMessage,recipientUserId:recipientUserId[0]})
+     
+    }, [newMessage])
+    
+    //Receive Message
+    useEffect(() => {
+        if(socket==null)return
+        socket.on('getMessage',(res)=>{
+            if(currentChat?._id !== res.chatId)return
+            
+            setCurrentChatMessages((prev)=>[...prev,res])
+        })
+
+        return()=>{
+            socket.off('getMessage')
+        }
+    }, [socket,currentChat])
     
     useEffect(() => {
         const findUsers = async () => {
@@ -152,7 +182,7 @@ export const ChatContextProvider = ({ user, children }) => {
         {
             return(
             toast({ 
-                title: "Send cannot be send",
+                title: "Message cannot be send",
                 description:response.error,
                 status: 'error',
                 duration: 4000,
@@ -160,9 +190,9 @@ export const ChatContextProvider = ({ user, children }) => {
         }
         setCurrentChatMessages((messages)=>[...messages,response])
         setTextMessage('')
+        setNewMessage(response)
         // eslint-disable-next-line
     },[])
-    console.log(currentChat)
     return (<ChatContext.Provider value={{onlineUsers, isUserChatLoading, userChats, potentialChats, createChat,getCurrentChat,currentChat,currentChatMessages,sendMessage,iscurrentMessagesLoading }}>
         {children}
     </ChatContext.Provider>

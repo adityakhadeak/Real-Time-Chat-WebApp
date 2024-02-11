@@ -19,7 +19,6 @@ const ChatBox = () => {
     const { user } = useContext(AuthContext)
     const { recipientUser } = useFetchRecipientUser(currentChat, user)
     const[text,setTextMessage]=useState('')
-    console.log(text)
     return (
         currentChat ? (
             <Grid fontFamily={'Raleway'} height='100%' templateColumns={'auto'} templateRows={'65px 520px 45px'} >
@@ -34,7 +33,7 @@ const ChatBox = () => {
                         {
                             currentChatMessages.map((message, index) => (
                                 <Box key={index} position={'relative'} padding={'8px'}>
-                                    <Box minWidth={'100px'} width={'fit-content'} height={'60px'} bgColor={'#005c4b'} rounded={10} p={'10px'} sx={message.senderId === user.id ?msg_From_Recipient:msg_From_user } position={'absolute'}>
+                                    <Box minWidth={'100px'} width={'fit-content'} height={'60px'} bgColor={'#005c4b'} rounded={10} p={'10px'} sx={message.senderId !== user.id ?msg_From_Recipient:msg_From_user } position={'absolute'}>
                                         <Text as="span">{message.text}</Text>
                                         <Text right={'10px'} bottom={'2px'} position={'absolute'} fontSize={'12px'}>{moment(message.createdAt).format('hh::mm')}</Text>
 
@@ -50,7 +49,7 @@ const ChatBox = () => {
                         <Box  width={'95%'}>
                             <InputEmoji value={text}  keepOpened cleanOnEnter  onChange={setTextMessage} placeholder='Type a message' borderRadius={'10px'}  />
                         </Box>
-                        <Button onClick={()=>{sendMessage(text,currentChat._id,recipientUser._id,setTextMessage)}} bgColor={'transparent'}  _hover={{ bgColor: '#4a4a4a' }} rounded={'5'} cursor={'pointer'}  >< VscSend color='#9d9d9d' fontSize={'25px'} /></Button>
+                        <Button onClick={()=>{sendMessage(text,currentChat._id,user?.id,setTextMessage)}} bgColor={'transparent'}  _hover={{ bgColor: '#4a4a4a' }} rounded={'5'} cursor={'pointer'}  >< VscSend color='#9d9d9d' fontSize={'25px'} /></Button>
 
                         {/* <InputGroup mx={'20px'} px={'15px'}  >
                             <InputEmoji  className='input_Send_Msg' fontSize={'15px'} color={'#9d9d9d'} placeholder='Type a message' borderRadius={'10px'} padding={'3px'} px={'10px'}  />
