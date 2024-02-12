@@ -8,8 +8,6 @@ import dotenv from 'dotenv'
 import { app, server } from './socket/socket.js'
 dotenv.config()
 
-
-
 app.use(express.json())
 app.use(cors())
 
