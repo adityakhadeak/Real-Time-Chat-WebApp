@@ -41,6 +41,7 @@ export const ChatContextProvider = ({ user, children }) => {
         return () => {
             socket.off('getOnlineUsers')
         }
+        // eslint-disable-next-line
     }, [socket])
 
     //sendMessage
@@ -52,7 +53,7 @@ export const ChatContextProvider = ({ user, children }) => {
         })
 
         socket.emit('sendMessage', { ...newMessage, recipientUserId: recipientUserId?.[0] })
-
+// eslint-disable-next-line
     }, [newMessage])
 
     //Receive Message and Notifications
@@ -238,7 +239,7 @@ export const ChatContextProvider = ({ user, children }) => {
         const mNotifications=notifications.map((note)=>{
             let notification={...note}
 
-            const foundNotification=thisUserNotifications.find(n=>n.senderId==note.senderId)
+            const foundNotification=thisUserNotifications.find(n=>n.senderId===note.senderId)
 
             if(foundNotification)
             notification.isRead=true;

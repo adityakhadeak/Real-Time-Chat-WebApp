@@ -1,5 +1,5 @@
 // export const baseUrl="http://localhost:4000"
-export const baseUrl="vaarta-backend.vercel.app"
+export const baseUrl="https://vaarta-backend.vercel.app/"
 export const PostRequest=async(url,body)=>{
     const response= await fetch(url,{
         method:"POST",

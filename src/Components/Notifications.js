@@ -1,4 +1,4 @@
-import { Badge, Box, Button, Icon, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverFooter, PopoverHeader, PopoverTrigger, Portal, Text } from '@chakra-ui/react'
+import { Badge, Box, Button, Icon, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverHeader, PopoverTrigger, Portal, Text } from '@chakra-ui/react'
 import { IoIosNotifications } from "react-icons/io";
 import moment from 'moment';
 import React, { useContext, useRef } from 'react'

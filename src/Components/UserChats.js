@@ -7,7 +7,7 @@ import { useFetchLatestMessage } from '../Hooks/useFetchLatestMessages.js'
 import moment from 'moment'
 
 const UserChats = ({ user, chat }) => {
-    const{getCurrentChat,onlineUsers,notifications,userChats,markThisUserNotificationsAsRead}=useContext(ChatContext)
+    const{getCurrentChat,onlineUsers,notifications,markThisUserNotificationsAsRead}=useContext(ChatContext)
     const { recipientUser } = useFetchRecipientUser(chat, user)
     const {latestMsg}=useFetchLatestMessage(chat)
     const unReadNotifications=getUnreadNotifications(notifications)
@@ -16,7 +16,7 @@ const UserChats = ({ user, chat }) => {
     )
 
     const truncateMsg=(text)=>{
-        const shortMsg=text.substring(0,20);
+        let shortMsg=text.substring(0,20);
         if(text.length>20)
         shortMsg=shortMsg+"..."
 
@@ -38,7 +38,7 @@ const UserChats = ({ user, chat }) => {
 
                     <Box textAlign={'start'}>
                         <Box fontSize={'18px'} fontWeight={'600'}>{recipientUser?.name}</Box>
-                        <Box fontSize={'14px'} fontWeight={'200'}>{latestMsg?.text&& <Box as='span'>{latestMsg.text}</Box>}</Box>
+                        <Box fontSize={'14px'} fontWeight={'200'}>{latestMsg?.text&& <Box as='span'>{truncateMsg(latestMsg.text)}</Box>}</Box>
                     </Box>
 
                     <Box>

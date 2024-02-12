@@ -7,8 +7,8 @@ const Register = () => {
     const { registerUserInfo, updateRegisterInfo, isLoadingRegister, registerUser } = useContext(AuthContext)
     const [showPass, setShowPass] = useState(false)
     return (
-        <Box fontFamily={'Raleway'} color={'white'} bg={'#282828'} >
-            <Flex height={'91.8vh'} flexDirection={'column'} justifyContent={'center'} alignItems={'center'}>
+        <Box height={'100%'} fontFamily={'Raleway'} color={'white'} bg={'#282828'} >
+            <Flex  height={'100%'} flexDirection={'column'} justifyContent={'center'} alignItems={'center'}>
                 <Text my={'10px'} p={'10px'} fontSize={'27px'} as={'h1'}>
                     Register
                 </Text>

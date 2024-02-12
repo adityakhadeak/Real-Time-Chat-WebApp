@@ -22,6 +22,7 @@ useEffect(() => {
   }
 
   getMessages()
+  // eslint-disable-next-line
 }, [newMessage,notifications])
 
 return {latestMsg}
