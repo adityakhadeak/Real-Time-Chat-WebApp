@@ -1,5 +1,11 @@
 import { Server } from "socket.io";
-const io =new Server({cors:"http://localhost:3000"})
+import express from 'express'
+import http from 'http'
+
+const app=express()
+
+const server=http.createServer(app)
+const io =new Server(server,{cors:"http://localhost:3000"})
 
 let onlineUsers=[]
 io.on('connection',(socket)=>{
@@ -34,4 +40,4 @@ io.on('connection',(socket)=>{
 
 })
 
-io.listen(9000)
+export {app,server,io}
