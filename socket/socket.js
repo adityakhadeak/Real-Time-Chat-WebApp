@@ -5,7 +5,8 @@ import http from 'http'
 const app=express()
 
 const server=http.createServer(app)
-const io =new Server(server,{cors:"https://vaartarealtimechatapp.vercel.app/"})
+// const io =new Server(server,{cors:"https://vaartarealtimechatapp.vercel.app/"})
+const io =new Server(server,{cors:"https://localhost:3000/"})
 
 let onlineUsers=[]
 io.on('connection',(socket)=>{
