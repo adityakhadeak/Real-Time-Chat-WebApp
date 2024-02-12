@@ -1,24 +1,23 @@
 import { Badge, Box, Button, Icon, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverFooter, PopoverHeader, PopoverTrigger, Portal, Text } from '@chakra-ui/react'
 import { IoIosNotifications } from "react-icons/io";
 import moment from 'moment';
-import React, { useContext } from 'react'
+import React, { useContext, useRef } from 'react'
 import { ChatContext } from '../Context/ChatContext.js';
+import { AuthContext } from '../Context/AuthContext.js';
 import { getUnreadNotifications } from '../Utilis/getUnreadNotifications.js';
 
 const Notifications = () => {
-    const { notifications, allUsers } = useContext(ChatContext)
+    const {user}=useContext(AuthContext)
+    const { notifications, allUsers ,markAllNotificationsRead,markNotificationAsRead ,userChats,} = useContext(ChatContext)
     const unReadNotifications = getUnreadNotifications(notifications)
     const modifiedNotifications = notifications?.map((note) => {
         const sender = allUsers.find((user) => user._id === note.senderId)
-        console.log(sender)
         return {
             ...note,
             senderName: sender?.name
         }
     })
-
-    console.log("Un", unReadNotifications)
-    console.log("Mo", modifiedNotifications)
+    const closeNote=useRef()
     return (
         <Box display={'flex'} alignItems={'center'}>
             <Popover>
@@ -37,20 +36,24 @@ const Notifications = () => {
                         <PopoverHeader border={'none'} fontSize={'18px'} fontWeight={'600'}>
                             <Box display={'flex'} flexDirection={'row'} justifyContent={'space-between'} alignItems={'center'}>
                                 <Text>Notifications</Text>
-                                <Button w={'125px'} _hover={{bgColor:"#4a4a4a"}} p={'10px'} color={'white'} height={'25px'} bgColor={'#4a4a4a'}>Mark all as read</Button>
+                                <Button onClick={()=>markAllNotificationsRead(notifications)} w={'125px'} _hover={{bgColor:"#4a4a4a"}} p={'10px'} color={'white'} height={'25px'} bgColor={'#4a4a4a'}>Mark all as read</Button>
 
                             </Box>
                         </PopoverHeader>
+                        <PopoverCloseButton ref={closeNote}  display={'none'} />
                         <PopoverBody height={'400px'} border={'none'}>
-                            <Box overflow={"scroll"} className='' height={'100%'} display={'flex'} flexDirection={'column'} gap={3}>
+                            <Box overflow={"scroll"} className='' height={'100%'} px={'10px'} display={'flex'} flexDirection={'column'} gap={3}>
                                 {modifiedNotifications.length === 0 ?
                                     <Box textAlign={'center'}>
                                         <Text>No notifications to display</Text>
                                     </Box> :
                                     modifiedNotifications?.map((note, index) => (
-                                        <Box key={index} position={'relative'} my p={'5px'} height={'60px'} bg={"#4a4a4a"}>
-                                            <Text><Text as='span' fontWeight={700}>{note.senderName}</Text> sent you a meaasage</Text>
-                                            <Text fontSize={'12px'}>{moment(note.date).calendar()}</Text>
+                                        <Box onClick={()=>{
+                                            markNotificationAsRead(note,userChats,notifications,user)
+                                            closeNote.current.click()
+                                        }} cursor={'pointer'} key={index} position={'relative'} my p={'5px'} borderRadius={'10px'} height={'60px'} bg={note.isRead===false?"#4a4a4a":"#363535"}>
+                                            <Text px={'5px'} ><Text as='span' fontWeight={700}>{note.senderName}</Text> sent you a meaasage</Text>
+                                            <Text px={'5px'} fontSize={'12px'}>{moment(note.date).calendar()}</Text>
                                         </Box>
                                     ))
                                 }

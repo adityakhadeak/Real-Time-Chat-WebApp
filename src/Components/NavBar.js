@@ -21,7 +21,9 @@ const NavBar = () => {
                 </Text>}
             </Box>
             <Spacer />
+            {user&&
             <Notifications/>
+}
             <Box display={'flex'} flexDirection={'row'} mr={'10px'} px={'5px'}>
                 {!user?<> 
                 <Link to={'login'}><Button size={{ base: 'sm', md: 'md' }} colorScheme='blue' px={{ base: '3px', md: '10px' }} mx={'3px'}>Login</Button></Link>
