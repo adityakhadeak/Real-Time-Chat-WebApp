@@ -8,18 +8,22 @@ io.on('connection',(socket)=>{
     socket.on("addNewUser",(userId)=>{
         !onlineUsers.some((user)=> user.userId===userId)&&
         onlineUsers.push({userId,socketId:socket.id})
-        console.log(onlineUsers)
         io.emit('getOnlineUsers',onlineUsers)
     })
 
     socket.on('sendMessage',(message)=>{
-        console.log("This is the message sent ",message)
         const user=onlineUsers.find((user)=>user.userId===message.recipientUserId)
-        console.log("Online Users ",onlineUsers)
-        console.log("Users ",onlineUsers)
-        console.log("is Online ",user?.userId)
+       
         if(user){
             io.to(user.socketId).emit("getMessage",message)
+            io.to(user.socketId).emit("getNotifications",
+            {
+                senderId:message.senderId,
+                isRead:false,
+                text:message.text,
+                date:new Date()
+            })
+
         }
     })
     socket.on("disconnect",()=>{
