@@ -1,12 +1,24 @@
-import { Box, Button, Flex, Spacer, Text } from '@chakra-ui/react'
+import { Box, Button, Flex, Spacer, Text, useToast } from '@chakra-ui/react'
 import React, { useContext } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { AuthContext } from '../Context/AuthContext.js'
 import Notifications from './Notifications.js'
 
 const NavBar = () => {
-    const { user,logOut} = useContext(AuthContext)
-    
+    const { user,setUser} = useContext(AuthContext)
+    const navigate=useNavigate()
+    const toast=useToast()
+    const logOut =() => {
+        localStorage.removeItem('user')
+        setUser(null)
+        navigate('login')
+        toast({
+            title: "Logged Out Successfully",
+            status: 'success',
+            duration: 4000,
+            isClosable: true,
+        })
+    }
     return (
         <Flex w={'100%'} fontFamily={'Raleway'} color={'white'} bg={'#202528'} alignItems={'center'} p={'10px'} px={'20px'} gap={5}>
             <Box ml={'10px'} px={'5px'}>

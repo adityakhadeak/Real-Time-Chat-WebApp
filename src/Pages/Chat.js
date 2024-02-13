@@ -1,13 +1,21 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { ChatContext } from '../Context/ChatContext.js'
 import { Box, Grid, GridItem, Text } from '@chakra-ui/react'
 import UserChats from '../Components/UserChats.js'
 import { AuthContext } from '../Context/AuthContext.js'
 import PotentialChats from '../Components/PotentialChats.js'
 import ChatBox from '../Components/ChatBox.js'
+import { useNavigate } from 'react-router-dom'
 const Chat = () => {
   const { userChats, isUserChatLoading } = useContext(ChatContext)
   const { user } = useContext(AuthContext)
+
+  const navigate=useNavigate()
+  useEffect(() => {
+    if(user===null)navigate('login')
+    // eslint-disable-next-line 
+  }, [user])
+  
   return (
     <Grid height='100%'
       templateRows='1fr'

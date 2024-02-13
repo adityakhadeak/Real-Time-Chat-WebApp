@@ -83,18 +83,8 @@ export const AuthContextProvider = (props) => {
         // eslint-disable-next-line 
     }, [loginUserInfo])
 
-    const logOut = useCallback(() => {
-        localStorage.removeItem('user')
-        setUser(null)
-        toast({
-            title: "Logged Out Successfully",
-            status: 'success',
-            duration: 4000,
-            isClosable: true,
-        })
-        // eslint-disable-next-line 
-    }, [])
-    return (<AuthContext.Provider value={{ logOut, user, setRegisterUserInfo, registerUserInfo, setLoginUserInfo, updateLoginInfo, updateRegisterInfo, isLoadingRegister, registerUser, loginUser, isLoginLoading, loginUserInfo }}>
+   
+    return (<AuthContext.Provider value={{ setUser, user, setRegisterUserInfo, registerUserInfo, setLoginUserInfo, updateLoginInfo, updateRegisterInfo, isLoadingRegister, registerUser, loginUser, isLoginLoading, loginUserInfo }}>
         {props.children}
     </AuthContext.Provider>)
 }

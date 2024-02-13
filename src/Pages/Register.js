@@ -1,11 +1,18 @@
 import { Box, Button, Flex, FormControl, FormLabel, Icon, Input, InputGroup, InputRightElement, Text } from '@chakra-ui/react'
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { AuthContext } from '../Context/AuthContext.js'
 import { BiSolidShow, BiSolidHide } from "react-icons/bi";
+import { useNavigate } from 'react-router-dom';
 
 const Register = () => {
-    const { registerUserInfo, updateRegisterInfo, isLoadingRegister, registerUser } = useContext(AuthContext)
+    const navigate=useNavigate()
+
+    const { registerUserInfo, updateRegisterInfo, isLoadingRegister, registerUser,user } = useContext(AuthContext)
     const [showPass, setShowPass] = useState(false)
+    useEffect(() => {
+        if(user!==null)navigate('/')
+        // eslint-disable-next-line 
+      }, [user])
     return (
         <Box height={'100%'} fontFamily={'Raleway'} color={'white'} bg={'#282828'} >
             <Flex  height={'100%'} flexDirection={'column'} justifyContent={'center'} alignItems={'center'}>
