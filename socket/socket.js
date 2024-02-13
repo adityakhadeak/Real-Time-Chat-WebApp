@@ -10,7 +10,7 @@ const server=http.createServer(app)
 
 const io =new Server(server,{
     cors:{
-    origin:["https://vaartarealtimechatapp.vercel.app/"],methods:["GET","POST"]
+    origin:["https://vaartarealtimechatapp.vercel.app"],methods:["GET","POST"]
 },})
 
 let onlineUsers=[]
