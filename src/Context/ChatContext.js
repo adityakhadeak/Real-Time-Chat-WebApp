@@ -23,7 +23,7 @@ export const ChatContextProvider = ({ user, children }) => {
 
     //Socket.io Connection
     useEffect(() => {
-        const newSocket = io(baseUrl)
+        const newSocket = io("https://vaarta-backend.vercel.app")
         setSocket(newSocket)
         return () => {
             newSocket.disconnect()
