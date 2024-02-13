@@ -6,7 +6,12 @@ const app=express()
 
 const server=http.createServer(app)
 // const io =new Server(server,{cors:"https://vaartarealtimechatapp.vercel.app/"})
-const io =new Server(server,{cors:"https://localhost:3000/"})
+// const io =new Server(server,{cors:"http://192.168.0.3:3000"})
+
+const io =new Server(server,{
+    cors:{
+    origin:["https://vaartarealtimechatapp.vercel.app/"],methods:["GET","POST"]
+},})
 
 let onlineUsers=[]
 io.on('connection',(socket)=>{
